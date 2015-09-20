@@ -1,4 +1,4 @@
-angular.module('sharebox.profile').controller('ProfileController', ['$scope', '$routeParams', '$location', 'Global', 'Profile', function ($scope, $routeParams, $location, Global, Profile) {
+angular.module('sharebox.profile').controller('ProfileController', ['$scope', '$routeParams', '$location', 'Global', 'Profile', 'Lookup', function ($scope, $routeParams, $location, Global, Profile, Lookup) {
     $scope.global = Global;
     //
     //$scope.create = function() {
@@ -58,6 +58,9 @@ angular.module('sharebox.profile').controller('ProfileController', ['$scope', '$
         Profile.updateProfile($scope.profile).success(function(profile){
             // Put redirect to show here.
             $scope.profile = profile;
+
+            Global.updateUser();
+            Global.user = window.user;
             setTimeout(
                 function(){
                     jQuery('#profileSubmitButton').html('Save');
@@ -69,6 +72,14 @@ angular.module('sharebox.profile').controller('ProfileController', ['$scope', '$
         });
     };
 
+    $scope.loadStates = function(){
+        Lookup.getStates().success(function(states){
+            $scope.states = states;
+        }).error(function(err){
+
+        });
+    };
+
     //$scope.findOne = function() {
     //    Articles.get({
     //        articleId: $routeParams.articleId
@@ -77,4 +88,5 @@ angular.module('sharebox.profile').controller('ProfileController', ['$scope', '$
     //    });
     //};
     $scope.load();
+    $scope.loadStates();
 }]);
